@@ -11,8 +11,20 @@ class Aws_Iam(threading.Thread):
     def list_Iam_Users_With_Access_Key(self):
 	session = boto3.session.Session()
 	iam = session.resource('iam')
-	for users in iam.users.all():
- 	    print(users)
+	for user in iam.users.all():   
+           for key in user.access_keys.all():
+		AccessId = key.access_key_id
+		Status = key.status
+		if (Status == "Active"):
+		    print ("User: ", user.user_name, "Key: ",  AccessId,  "Active")
+                else:
+		    print ("User: ",  user.user_name, "Key: ",  AccessId,  "InActive")
+
+#	   access_key = iam.AccessKey(users.user_name, users.user_id)
+#	   print(access_key.status)
+# 	   if access_key.status == Active :
+#	       print(users.user_name)
+		
 
 a = Aws_Iam()
 a.list_Iam_Users_With_Access_Key()
